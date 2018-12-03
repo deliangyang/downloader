@@ -15,9 +15,10 @@ class Reader(object):
         logging.info('read success:%s' % self.filename)
         for row in range(1, table.nrows):
             item = table.row_values(row)
-            ChangB.song = item[0]
-            ChangB.artist = item[1]
-            ChangB.lyric = item[2]
-            ChangB.audio = item[3]
-            ChangB.origin = item[4]
-            yield ChangB
+            cb = ChangB()
+            cb.song = item[0]
+            cb.artist = item[1]
+            cb.lyric = item[2]
+            cb.audio = item[3]
+            cb.origin = item[4]
+            yield cb

@@ -8,7 +8,7 @@ def usage():
     parse = argparse.ArgumentParser()
     parse.add_argument('file', type=str, default=None, help='the file of excel')
     parse.add_argument('--thread', type=int, default=3, help='the number of thread')
-    parse.add_argument('--debug', type=bool, default=False, help='set debug model')
+    parse.add_argument('--debug', type=bool, default=True, help='set debug model')
     return parse.parse_args(sys.argv[1:])
 
 

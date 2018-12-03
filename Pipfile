@@ -7,6 +7,8 @@ name = "pypi"
 xlrd = "*"
 xlwt = "*"
 requests = "*"
+"py2exe" = "*"
+pyinstaller = "*"
 
 [dev-packages]
 
