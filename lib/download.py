@@ -24,7 +24,7 @@ class Download(threading.Thread):
         for item in self.iterator:
             # 处理歌词
             suffix = item.get_url_file_suffix(item.lyric)
-            filename = 'data/lyric/' + self.get_url_md5(item.lyric) + '.' + suffix
+            filename = 'data/zrc/' + self.get_url_md5(item.lyric) + '.' + suffix
             filename, content = self.storage(item.lyric, filename)
 
             if suffix and item.lyric:
@@ -33,7 +33,9 @@ class Download(threading.Thread):
                     logging.info('decrypt zrc file, %s', decrypted and True)
                     if decrypted:
                         decrypted = self.decrypt.convert_to_new(decrypted)
-                        self.storage_decrypt_lyric(item.lyric, decrypted.encode('utf-8'))
+                        result, _filename = self.storage_decrypt_lyric(item.lyric, decrypted.encode('utf-8'))
+                        if result:
+                            item.zrc = 'data/lyric/' + _filename
                 item.lyric = filename
 
             # 处理原唱
@@ -58,8 +60,9 @@ class Download(threading.Thread):
                 self.ws.write(self.line_count, 0, result.song)
                 self.ws.write(self.line_count, 1, result.artist)
                 self.ws.write(self.line_count, 2, result.lyric)
-                self.ws.write(self.line_count, 3, result.origin)
-                self.ws.write(self.line_count, 4, result.audio)
+                self.ws.write(self.line_count, 3, result.zrc)
+                self.ws.write(self.line_count, 4, result.origin)
+                self.ws.write(self.line_count, 5, result.audio)
             except Exception as e:
                 logging.info('ws write e: %s' % e)
             self.line_count += 3
@@ -99,13 +102,13 @@ class Download(threading.Thread):
 
     @staticmethod
     def storage_decrypt_lyric(url, content):
-        filename = hashlib.md5(url.encode("utf-8")).hexdigest() + '.txt'
-        filename = os.path.abspath(os.path.join('data', 'zrc', filename))
+        _filename = hashlib.md5(url.encode("utf-8")).hexdigest() + '.txt'
+        filename = os.path.abspath(os.path.join('data', 'zrc', _filename))
         with open(filename, 'wb') as f:
             f.write(content)
             f.close()
-            return True
-        return False
+            return True, _filename
+        return False, None
 
     @staticmethod
     def get_url_md5(url):

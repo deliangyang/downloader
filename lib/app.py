@@ -35,6 +35,7 @@ class Application(object):
         wb_filename = time.strftime('%Y%m%d-%H-%M-%S', time.localtime(time.time())) + '.xls'
         wb_filename = os.path.join(os.path.curdir, 'data/export', wb_filename)
         wb.save(wb_filename)
+        # os.system('start explorer %s' % os.path.join(os.path.curdir, 'data/export', wb_filename))
 
     @staticmethod
     def grouper(n, iterable):
