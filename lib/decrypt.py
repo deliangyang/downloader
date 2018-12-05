@@ -24,4 +24,19 @@ class ChangBaDecrypt(object):
 
     def convert_to_new(self, content):
         content = self.pattern.sub('>', content)
+        content = re.sub(r'\[[^\]]+\]\r?\n', '', content)
+        lines = re.split(r'\r?\n', content)
+
+        offset_item = re.findall(r'\[(\d+).(\d+)\]', content)
+        start, _ = offset_item[0]
+        replace_pattern = re.compile(r'(\[\d+,\d+\])')
+        main_content = []
+        for line in lines:
+            if not line.endswith(']') and len(line) > 0:
+                line = replace_pattern.sub(r'\1{red}', line)
+                main_content.append(line + ';')
+        content = '[offset:%d]\n[refrain:%d]\n[halfSong:%d]%s%s' % (
+            int(start), 0, 0, "\n" * 6, "\n".join(main_content)
+        )
+        content.strip('\n')
         return content

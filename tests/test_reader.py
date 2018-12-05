@@ -15,5 +15,7 @@ class TestReader(unittest.TestCase):
 
     def test_decrypt(self):
         changba = ChangBaDecrypt()
-        content = changba.decrypt_by_file(os.path.join(os.curdir, '..', 'data/a89f8523a6724a915c6b2038c928b342.zrce'))
+        content = changba.decrypt_by_file(os.path.join(os.curdir, '..', 'data/zrc/18ae54dc40bcf82c81c10caebf7f30cd.zrce'))
+        content = changba.convert_to_new(content)
+        print(content)
         self.assertRegex(content, re.compile(r'<'))

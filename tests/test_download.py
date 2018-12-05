@@ -20,6 +20,9 @@ class TestDownload(unittest.TestCase):
     def test_xls_write(self):
         filename = os.path.join(os.curdir, '..', 'data/changba.json')
         xls_filename = os.path.join(os.curdir, '..', 'data/new1.xls')
+        file_path = os.path.dirname(filename)
+        if not os.path.isdir(file_path):
+            os.makedirs(file_path)
         with open(filename) as f:
             items = json.load(f)
             f.close()

@@ -59,10 +59,10 @@ class Download(threading.Thread):
             try:
                 self.ws.write(self.line_count, 0, result.song)
                 self.ws.write(self.line_count, 1, result.artist)
-                self.ws.write(self.line_count, 2, result.lyric)
-                self.ws.write(self.line_count, 3, result.zrc)
-                self.ws.write(self.line_count, 4, result.origin)
-                self.ws.write(self.line_count, 5, result.audio)
+                # self.ws.write(self.line_count, 2, result.lyric)
+                self.ws.write(self.line_count, 2, result.zrc)
+                self.ws.write(self.line_count, 3, result.origin)
+                self.ws.write(self.line_count, 4, result.audio)
             except Exception as e:
                 logging.info('ws write e: %s' % e)
             self.line_count += 3
@@ -71,6 +71,12 @@ class Download(threading.Thread):
 
     @staticmethod
     def storage(url, filename):
+        try:
+            file_path = os.path.dirname(filename)
+            if not os.path.isdir(file_path):
+                os.makedirs(file_path)
+        except Exception as e:
+            logging.info('create dir: %s' % e)
         try:
             if len(url) == 0:
                 raise UnValidUrl()
@@ -103,7 +109,13 @@ class Download(threading.Thread):
     @staticmethod
     def storage_decrypt_lyric(url, content):
         _filename = hashlib.md5(url.encode("utf-8")).hexdigest() + '.txt'
-        filename = os.path.abspath(os.path.join('data', 'zrc', _filename))
+        filename = os.path.abspath(os.path.join('data', 'lyric', _filename))
+        try:
+            file_path = os.path.dirname(filename)
+            if not os.path.isdir(file_path):
+                os.makedirs(file_path)
+        except Exception as e:
+            logging.info('create dir: %s' % e)
         with open(filename, 'wb') as f:
             f.write(content)
             f.close()
